@@ -1,5 +1,5 @@
 const productModel = require('../models/productSchema.model');
-
+const UserModel = require('../models/userSchema.model');
 // Method of mongoose;
 //save(),create(),findOne(),find(),findByIdAndUpdate();
 //take info from body and params of request object;
@@ -23,19 +23,27 @@ const getProduct = async(req,res)=>{
 const createProduct = async(req,res)=>{
     try{
         const {productname,category,productdetails,price,rating,productImage,brand,discountPercentage} = req.body;
-        const  insertProductProduct= await productModel.create({
-            productname,
-            category,
-            productdetails,
-            price,
-            rating,
-            productImage,
-            brand,
-            discountPercentage
-        });
-        res.status(200).json({
-            message:"Product Added Successfully",
-            insertProductProduct
+        const userid =req.userId;
+        console.log(userid,"user id coming from req.userid of jwtoken");
+        const isUser =await UserModel.findById(userid);
+        if(isUser){
+            const  insertProductProduct= await productModel.create({
+                productname,
+                category,
+                productdetails,
+                price,
+                rating,
+                productImage,
+                brand,
+                discountPercentage
+            });
+            res.status(200).json({
+                message:"Product Added Successfully",
+                insertProductProduct
+            })
+        }
+        res.status(404).json({
+            message:"User does not exist to add the the product"
         })
     }catch(error){
         res.status(404).json({

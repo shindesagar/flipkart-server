@@ -29,8 +29,8 @@ const UserdetailSchema = new Schema({
   },
   password: {
     type: String,
-    minlength: 8,
-    maxlength: 12,
+    // minlength: 8,
+    // maxlength: 12,
     require: true,
     // pattern: custom validation
     //we want to check whether password length is greater than 8
